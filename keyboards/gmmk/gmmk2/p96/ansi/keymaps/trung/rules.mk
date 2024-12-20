@@ -1,35 +1,20 @@
 # Copyright 2024 QMK
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-################################################################################
-#
-# 88888888888 888      d8b                .d888 d8b 888               d8b
-#     888     888      Y8P               d88P"  Y8P 888               Y8P
-#     888     888                        888        888
-#     888     88888b.  888 .d8888b       888888 888 888  .d88b.       888 .d8888b
-#     888     888 "88b 888 88K           888    888 888 d8P  Y8b      888 88K
-#     888     888  888 888 "Y8888b.      888    888 888 88888888      888 "Y8888b.
-#     888     888  888 888      X88      888    888 888 Y8b.          888      X88
-#     888     888  888 888  88888P'      888    888 888  "Y8888       888  88888P'
-#
-#                                                       888                 888
-#                                                       888                 888
-#                                                       888                 888
-#    .d88b.   .d88b.  88888b.   .d88b.  888d888 8888b.  888888 .d88b.   .d88888
-#   d88P"88b d8P  Y8b 888 "88b d8P  Y8b 888P"      "88b 888   d8P  Y8b d88" 888
-#   888  888 88888888 888  888 88888888 888    .d888888 888   88888888 888  888
-#   Y88b 888 Y8b.     888  888 Y8b.     888    888  888 Y88b. Y8b.     Y88b 888
-#    "Y88888  "Y8888  888  888  "Y8888  888    "Y888888  "Y888 "Y8888   "Y88888
-#        888
-#   Y8b d88P
-#    "Y88P"
-#
-################################################################################
-
 LEADER_ENABLE = yes
 TAP_DANCE_ENABLE = yes
 DYNAMIC_TAPPING_TERM_ENABLE = yes
 AUTO_SHIFT_ENABLE = no
-MOUSEKEY_ENABLE = yes
+
+BOOTMAGIC_ENABLE = yes       # Enable Bootmagic Lite.
+MOUSEKEY_ENABLE = yes        # Mouse keys.
+EXTRAKEY_ENABLE = yes        # Audio control and System control.
+CONSOLE_ENABLE = no          # Console for debug.
+COMMAND_ENABLE = no          # Commands for debug and configuration.
+NKRO_ENABLE = yes            # Enable NKRO Rollover.
+BACKLIGHT_ENABLE = no        # Enable keyboard backlight functionality.
+RGBLIGHT_ENABLE = no         # Enable keyboard RGB underglow.
+AUDIO_ENABLE = no            # Audio output.
+RGB_MATRIX_ENABLE = yes      # Enable RGB matrix effects.
 COMBO_ENABLE = yes
 # RGB_MATRIX_DRIVER = AW20216S
