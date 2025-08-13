@@ -1,316 +1,334 @@
+/* Copyright 2021 Glorious, LLC <salman@pcgamingrace.com>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+// QMK compile -km trung
+
+
 #include QMK_KEYBOARD_H
+#include "encoder.c"
+#include "trngm.h"
+
+#define FN_LT1 LT(1,KC_SPC)
+#define FN_LT2 LT(2,KC_TAB)
+#define Qte KC_DQT
+#define caps KC_CAPS
+
+// LAYERS
+enum custom_user_layers {
+    _BASE,
+    _SPACE,
+    _TAB,
+    _FN,
+    _DEFAULT
+};
 
 
-/* KEYBOARD LAYOUT
-    * |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-    * | ESC    | F1     | F2     | F3     | F4     | F5     | F6     | F7     | F8     | F9     | F10    | F11    | F12    | PRTSC  |        | PRTSC | INS   | PG UP  | PG DN   |
-    * |--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+-----------------+---------+-------+--------+-------|
-    * | DEL    | 1      | 2      | 3      | 4      | 5      | 6      | 7      | 8      | 9      | 10     | -      | =      | BKSPCE |        | NUM   | BKSPCE| BKSPCE | BKSPCE  |
-    * |--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+-----------------+---------+-------+--------+-------|
-    * | TAB    | Q      | W      | E      | R      | T      | Y      | U      | I      | O      | P      | [      | ]      | \      |        |   7   |   8   |   9    |         |
-    * |--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+-----------------+------------------------+--------+    +    |
-    * | CAPS   | A      | S      | D      | F      | G      | H      | J      | K      | L      | ;      | '      |     ENTER       |        |   4   |   5   |   6    |         |
-    * |--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------------------------+------------------------+--------+---------|
-    * | SHIFT  | Z      | X      | C      | V      | B      | N      | M      | ,      | .      | /      | SHIFT  |        |  UP    |        |   1   |   2   |   3    |         |
-    * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+-----------------+--------+--------+-------+-------+--------+  ENTER  |
-    * | LCTRL  | LGUI   | LALT   |                   SPACE                             | RALT   | FN     | RCTRL  |  DOWN  | RIGHT  |  DOWN  |       |  0    |  DEL   |         |
-    * |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
- */
-
-#define FN_TAB LT(2,KC_TAB)
-#define FN_SPC LT(1,KC_SPC)
-
-enum macros {
-    // Macros
+enum custom_keycodes {
     M_1 = SAFE_RANGE,
     M_2,
     M_3,
     M_4,
 };
 
-enum tapdance_keycodes {// Tap Dance declarations
-    TD_DEL = 0,
-    TD_Q,
-    TD_W,
-    TD_E,
-	//TD_CMD, //double quote, quote
-    TD_2, //slash,backspace
-    TD_3, //equal, underscore
-    TD_4, //plus,minus
-    TD_8,
+// Tap Dance declarations
+enum {
+    lay1,
+    lay2,
+    lay3,
+    wqte,
+    qqte,
+    lead,
+    esc
 };
 
+
+// clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-	[0] = LAYOUT(
-        KC_ESC,       KC_F1,       KC_F2,      KC_F3,      KC_F4,   KC_F5, /**/  KC_F6,     KC_F7,   KC_F8,    KC_F9,   KC_F10,     KC_F11,     KC_F12,     KC_PSCR,            /**/ KC_MPLY,    KC_MUTE,    KC_VOLD,    KC_VOLU,
 
-        TD(TD_DEL),   KC_1,        KC_2,       KC_3,       KC_4,    KC_5,  /**/  KC_6,      KC_7,    KC_8,     KC_9,    KC_0,       KC_MINS,    KC_EQL,     KC_BSPC,            /**/ KC_HOME,    KC_END,     KC_PGDN,    KC_PGUP,
-        FN_TAB,       TD(TD_Q),    TD(TD_W),   TD(TD_E),   KC_R,    KC_T,  /**/  KC_Y,      KC_U,    KC_I,     KC_O,    KC_P,       KC_LBRC,    KC_RBRC,    KC_BSLS,            /**/ KC_P1,      KC_P2,      KC_P3,      KC_PPLS,
-        KC_CAPS,      KC_A,        KC_S,       KC_D,       KC_F,    KC_G,  /**/  KC_H,      KC_J,    KC_K,     KC_L,    KC_SCLN,    KC_QUOT,    KC_ENT,                         /**/ KC_P4,      KC_P5,      KC_P6,
-        KC_LSFT,      KC_Z,        KC_X,       KC_C,       KC_V,    KC_B,  /**/  KC_N,      KC_M,    KC_COMM,  KC_DOT,  KC_SLSH,    KC_RSFT,            KC_UP,                  /**/ KC_P7,      KC_P8,      KC_P9,      KC_PENT,
-        KC_LCTL,      KC_LGUI,     KC_LALT,          FN_SPC,               /**/                      KC_RALT,  MO(3),   KC_RCTL,                KC_LEFT,KC_DOWN,KC_RGHT,        /**/             KC_P0,      KC_PDOT
+//      ESC      F1       F2       F3       F4       F5       F6       F7       F8       F9       F10      F11      F12	     Prt           Rotary(Mute)
+//      ~        1        2        3        4        5        6        7        8        9        0         -       (=)	     BackSpc           Del
+//      Tab      Q        W        E        R        T        Y        U        I        O        P        [        ]        \                 PgUp
+//      Caps     A        S        D        F        G        H        J        K        L        ;        "                 Enter             PgDn
+//      Sh_L              Z        X        C        V        B        N        M        ,        .        ?                 Sh_R     Up       End
+//      Ct_L     Win_L    Alt_L                               SPACE                               Alt_R    FN       Ct_R     Left     Down     Right
+
+
+    // The FN key by default maps to a momentary toggle to layer 1 to provide access to the QK_BOOT key (to put the board into bootloader mode). Without
+    // this mapping, you have to open the case to hit the button on the bottom of the PCB (near the USB cable attachment) while plugging in the USB
+    // cable to get the board into bootloader mode - definitely not fun when you're working on your QMK builds. Remove this and put it back to KC_RGUI
+    // if that's your preference.
+    //
+    // To put the keyboard in bootloader mode, use FN+backslash. If you accidentally put it into bootloader, you can just unplug the USB cable and
+    // it'll be back to normal when you plug it back in.
+    //
+    // This keyboard defaults to 6KRO instead of NKRO for compatibility reasons (some KVMs and BIOSes are incompatible with NKRO).
+    // Since this is, among other things, a "gaming" keyboard, a key combination to enable NKRO on the fly is provided for convenience.
+    // Press Fn+N to toggle between 6KRO and NKRO. This setting is persisted to the EEPROM and thus persists between restarts.
+
+
+    [_BASE] = LAYOUT(
+        TD(esc),  KC_F1,    KC_F2,    KC_F3,  KC_F4,   DM_PLY1, DM_PLY2, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_PSCR,          KC_MUTE,
+        KC_DEL,   KC_1,     KC_2,     KC_3,   KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC,          KC_PGUP,
+        FN_LT2,   KC_Q,     KC_W,     KC_E,   KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS,          KC_PGDN,
+        caps,     KC_A,     KC_S,     KC_D,   KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,           KC_HOME,
+        KC_LSFT,            KC_Z,     KC_X,   KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,          KC_RSFT, KC_UP,   KC_END,
+        KC_LCTL,  KC_LGUI,  LALT_T(KC_ENT),                            FN_LT1,                      QK_LEAD, MO(3),     KC_RCTL, KC_LEFT, KC_DOWN, KC_RGHT
     ),
 
-	[1] = LAYOUT( //Spacebar..
-        QK_BOOT,      KC_F13,     KC_F14,     KC_F15,     KC_F16,   KC_F17, /**/  KC_F18,   KC_F19,   KC_F20,   KC_F21,   KC_F22,     KC_F23,     KC_F24,     KC_PSCR,          /**/ KC_DEL,     KC_INS,    KC_PGDN,   KC_PGUP,
-
-        KC_0,         KC_1,       KC_2,       KC_3,       KC_4,     KC_5,   /**/  _______,  _______,  _______,  _______,  _______,    _______,     _______,   KC_BSPC,          /**/ KC_HOME,    KC_END,     KC_PGDN,    KC_PGUP,
-        KC_ENT,       KC_4,       KC_5,       KC_6,       KC_BSPC,  _______,/**/  _______,  _______,  _______,  _______,  _______,    _______,     _______,   KC_BSLS,          /**/ KC_P1,      KC_P2,      KC_P3,      KC_PPLS,
-        _______,      KC_7,       KC_8,       KC_9,       KC_SPC,   _______,/**/  _______,  _______,  _______,  _______,  _______,    _______,     _______,                     /**/ KC_P4,      KC_P5,      KC_P6,
-        _______,      TD(TD_4),   TD(TD_2),   TD(TD_3),   KC_DOT,   _______,/**/  _______,  _______,  _______,  _______,  _______,    KC_RSFT,               KC_UP,             /**/ KC_P7,      KC_P8,      KC_P9,      KC_PENT,
-        KC_DOT,       KC_LGUI,    KC_LALT,                          KC_SPC,                          KC_RALT,   TO(0),    KC_RCTL,                  KC_LEFT,KC_DOWN,KC_RGHT,                     KC_P0,      KC_PDOT
-    ),
-        /* KEYBOARD LAYOUT
-        * |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------ﾡ
-        * | ESC    | F13    | F14     | F15   | F16    | F17    | F18    | F19    | F20    | F21    | F22    |   F23  | F24    | PRTSC  |        | PRTSC | INS   | PG UP  | PG DN   |
-        * |--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+-----------------+---------+-------+--------+-------|
-        * | DEL    | 1      | 2      | 3      | 4      |        |        |        |        |        |        | -      | =      | BKSPCE |        | NUM   | BKSPCE| BKSPCE | BKSPCE  |
-        * |--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+-----------------+---------+-------+--------+-------|
-        * | TAB    | 4      | 5      | 6      |        |        |        |        |        |        |        |        |        |        |        |       |        |       |         |
-        * |--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+-----------------+------------------------+--------+    +    |
-        * | CAPS   | A      | S      | D      |        |        |        |        |        |        |        |        |                 |        |       |        |       |         |
-        * |--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+--------------------------+--------+-------+-------+--------+---------|
-        * | SHIFT  | Z      | X      | C      |        |        |        |        |        |        |        |        |        |        |        |       |        |       |         |
-        * |--------+--------+--------+--------+--------+-----------------+--------+--------+--------+--------+-----------------+--------+--------+-------+-------+--------+  ENTER  |
-        * | LCTRL  | LGUI   | LALT   |                   SPACE                             | RALT   | FN     | RCTRL  |  DOWN  | RIGHT  |  DOWN  |       |  0     |  DEL  |         |
-        * ﹂------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-        */
-
-
-    [2] = LAYOUT( //Tab Key
-        QK_GESC,      KC_F1,      KC_F2,      KC_F3,      KC_F4,    KC_F5,   /**/ KC_F6,    KC_F7,    KC_F8,    KC_F9,       KC_F10,    KC_F11,     KC_F12,     KC_PSCR,                /**/ KC_DEL,    KC_INS,   KC_PGUP,  KC_PGDN,
-
-        KC_GRV,       _______,    _______,    _______,    _______,  _______, /**/ _______,  _______,  _______,  _______,     _______,   _______,    _______,    _______,                /**/ KC_HOME,   KC_END,     KC_PGDN,    KC_PGUP,
-        _______,      KC_LPRN,    KC_UP,      KC_RPRN,    KC_EQL,   _______, /**/ _______,  _______,  _______,  _______,     _______,   _______,    _______,    _______,                /**/ KC_P1,     KC_P2,      KC_P3,      KC_PPLS,
-        _______,      KC_LEFT,    KC_DOWN,    KC_RGHT,    _______,  _______, /**/ _______,  _______,  _______,  _______,     _______,   _______,    _______,                            /**/ KC_P4,     KC_P5,      KC_P6,
-        _______,      _______,    _______,    _______,    _______,  _______, /**/ _______,  _______,  _______,  _______,     _______,   _______,                KC_UP,                  /**/ KC_P7,     KC_P8,      KC_P9,      KC_PENT,
-        _______,      KC_LGUI,    KC_LALT,                         KC_SPC,                                       _______,     TO(0),     KC_RCTL,    KC_LEFT,    KC_DOWN,  KC_RGHT,     /**/            KC_P0,      KC_PDOT
+    [_SPACE] = LAYOUT(
+        QK_GESC, KC_F11, KC_F12,   KC_F13,  KC_F14,  KC_F15,  KC_F16,  KC_F17,  KC_F18,  KC_F19, KC_F20, KC_F21, KC_F22, KC_F23,               _______,
+        KC_0,    KC_1,    KC_2,    KC_3,    _______, _______, _______,    _______, _______, _______, _______, _______, _______, _______,          KC_PGUP,
+        KC_TAB,  KC_4,    KC_5,    KC_6,    KC_BSPC, KC_DQT,  M_3, MS_UP, _______, _______, _______, _______, _______, QK_BOOT,              KC_PGDN,
+        _______, KC_7,    KC_8,    KC_9,    KC_SPC,  KC_QUOT, MS_LEFT, MS_DOWN, MS_RGHT,    _______, _______, _______,          _______,          _______,
+        _______, KC_MINS, KC_SLSH, KC_EQL,  KC_DOT,  _______, _______, _______, _______,    _______, _______,          _______, RM_NEXT, _______,
+        CTL_T(KC_ENT), _______, KC_LALT,                            _______,                         _______, TO(0), _______, RM_SPDD, RM_PREV, RM_SPDU
     ),
 
-    [3] = LAYOUT( //FN Key
-        TG(0),        TG(1),      TG(2),      TG(3),      TG(4),     /**/ TG(5),    _______,  _______, _______,  _______,     _______,   _______,    _______,    QK_MAKE,                /**/ KC_DEL,    DT_PRNT,   DT_DOWN,  DT_UP,
-
-        _______,      M_1,        M_2,        M_3,        M_4,       /**/ _______,  _______,  _______, _______,  _______,     _______,   RGB_VAD,    RGB_VAI,    KC_BSPC,                /**/ _______,   AS_RPT,    AS_DOWN,  AS_UP,
-        _______,      _______,    _______,    _______,    _______,   /**/ _______,  _______,  _______, _______,  _______,     _______,   RGB_HUI,    RGB_HUD,    KC_BSLS,                /**/ _______,   _______,   _______,  _______,
-        _______,      AS_TOGG,    _______,    _______,    _______,   /**/ _______,  _______,  _______, _______,  _______,     _______,   RGB_SAI,    RGB_SAD,                            /**/ _______,   _______,   _______,
-        _______,      _______,    _______,    _______,    _______,   /**/ RGB_TOG,  _______,  _______, _______,  _______,     _______,   _______,                RGB_SPI,                /**/ RGB_M_P,   RGB_M_B,   RGB_M_R,  _______,
-        _______,      KC_LGUI,    KC_LALT,                        KC_SPC,                                        _______,     TO(0),     KC_RCTL,    RGB_RMOD,   RGB_SPD,  RGB_MOD,      /**/ _______,              _______
+    [_TAB] = LAYOUT(
+        _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_PSCR,              DT_PRNT,
+        _______, KC_LPRN, KC_RPRN, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,              DT_UP,
+        _______, KC_HOME, KC_UP,   KC_END,  KC_BSPC, _______, _______, _______, _______, _______, _______, _______, _______, QK_BOOT,              DT_DOWN,
+        _______, KC_LEFT, KC_DOWN, KC_RGHT, _______, _______, _______, _______, _______, _______, _______, _______,          _______,              _______,
+        _______,          KC_VOLD, KC_VOLU,  M_2,    M_3, _______, _______, _______, _______, _______, _______,          _______, RM_NEXT, _______,
+        _______, _______, _______,                            _______,                            _______, TO(0), _______, RM_SPDD, RM_PREV, RM_SPDU
     ),
+
+
+    [_FN] = LAYOUT(
+        TG(0),   TG(1),   TG(2),   TG(3),   TG(4),   TG(5), _______, _______, _______, _______, _______, _______, _______, DM_RSTP,            QK_RBT,
+        _______, M_1,     M_4,     _______, _______, _______, _______, _______, _______, _______, _______, UG_SATU, UG_HUEU, _______,          DM_PLY1,
+        _______, RGB_M_SW, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, QK_BOOT,         DM_PLY2,
+        _______, AS_ON,   AS_OFF,  _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,          DM_REC1,
+        _______,          _______, _______, RGB_TOG, RM_TOGG, _______, _______, QK_MAKE, _______, _______, _______,          _______, RM_NEXT, DM_REC2,
+        _______, _______, _______,                            _______,                            _______, TO(0), _______, RM_SPDD, RM_PREV, RM_SPDU
+    ),
+
 
     [4] = LAYOUT(
-        KC_ESC,         KC_F1,    KC_F2,     KC_F3,      KC_F4,  /**/ KC_F5,    KC_F6,    KC_F7,    KC_F8,    KC_F9,       KC_F10,    KC_F11,     KC_F12,     KC_PSCR,                /**/ KC_MPLY,   KC_MUTE,   KC_VOLD,  KC_VOLU,
-        KC_GRV,         KC_1,     KC_2,      KC_3,       KC_4,   /**/ KC_5,     KC_6,     KC_7,     KC_8,     KC_9,        KC_0,      KC_MINS,    KC_EQL,     KC_BSPC,                /**/ KC_HOME,   KC_PSLS,   KC_PAST,  KC_PMNS,
-        KC_TAB,         KC_Q,     KC_W,      KC_E,       KC_R,   /**/ KC_T,     KC_Y,     KC_U,     KC_I,     KC_O,        KC_P ,     KC_LBRC,    KC_RBRC,    KC_BSLS,                /**/ KC_P7,     KC_P8,     KC_P9,    KC_PPLS,
-        KC_CAPS,        KC_A,     KC_S,      KC_D,       KC_F,   /**/ KC_G,     KC_H,     KC_J,     KC_K,     KC_L,        KC_SCLN,   KC_QUOT,    KC_ENT,                             /**/ KC_P4,     KC_P5,     KC_P6,
-        KC_LSFT,        KC_Z,     KC_X,      KC_C,       KC_V,   /**/ KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,      KC_SLSH,   KC_RSFT,                KC_UP,                  /**/ KC_P1,     KC_P2,     KC_P3,    KC_PENT,
-        KC_LCTL,        KC_LGUI,  KC_LALT,   KC_SPC,             /**/                                         KC_RALT,     TO(0),     KC_RCTL,    KC_LEFT,    KC_DOWN,  KC_RGHT,      /**/ KC_P0,                KC_PDOT
+        _______, KC_MYCM, KC_WHOM, KC_CALC, KC_MSEL, KC_MPRV, KC_MNXT, KC_MPLY, KC_MSTP, KC_MUTE, KC_VOLD, KC_VOLU, _______, _______,          _______,
+        _______, RM_TOGG, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
+        _______, _______, RM_VALU, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,
+        _______, _______, RM_VALD, _______, _______, _______, _______, _______, _______, _______, _______, _______,          QK_BOOT,          _______,
+        _______,          _______, RM_HUEU, _______, RM_ON,   _______, NK_TOGG, _______, _______, _______, _______,          _______, RM_NEXT, _______,
+        _______, _______, _______,                            _______,                            _______, TO(0), _______, RM_SPDD, RM_PREV, RM_SPDU
     ),
 
-
-    [5] = LAYOUT(
-        KC_ESC,       KC_F1,       KC_F2,      KC_F3,      KC_F4,   KC_F5, /**/  KC_F6,     KC_F7,   KC_F8,    KC_F9,   KC_F10,     KC_F11,     KC_F12,     KC_PSCR,            /**/ KC_MPLY,    KC_MUTE,    KC_VOLD,    KC_VOLU,
-
-        TD(TD_DEL),   KC_1,        KC_2,       KC_3,       KC_4,    KC_5,  /**/  KC_6,      KC_7,    KC_8,     KC_9,    KC_0,       KC_MINS,    KC_EQL,     KC_BSPC,            /**/ KC_HOME,    KC_END,     KC_PGDN,    KC_PGUP,
-        FN_TAB,       TD(TD_Q),    TD(TD_W),   TD(TD_E),   KC_R,    KC_T,  /**/  KC_Y,      KC_U,    KC_I,     KC_O,    KC_P,       KC_LBRC,    KC_RBRC,    KC_BSLS,            /**/ KC_P1,      KC_P2,      KC_P3,      KC_PPLS,
-        KC_CAPS,      KC_A,        KC_S,       KC_D,       KC_F,    KC_G,  /**/  KC_H,      KC_J,    KC_K,     KC_L,    KC_SCLN,    KC_QUOT,    KC_ENT,                         /**/ KC_P4,      KC_P5,      KC_P6,
-        KC_LSFT,      KC_Z,        KC_X,       KC_C,       KC_V,    KC_B,  /**/  KC_N,      KC_M,    KC_COMM,  KC_DOT,  KC_SLSH,    KC_RSFT,            KC_UP,                  /**/ KC_P7,      KC_P8,      KC_P9,      KC_PENT,
-        KC_LCTL,      KC_LGUI,     KC_LALT,          FN_SPC,               /**/                      KC_RALT,  TO(0),   KC_RCTL,                KC_LEFT,KC_DOWN,KC_RGHT,        /**/             KC_P0,      KC_PDOT
+    [_DEFAULT] = LAYOUT(
+        KC_ESC,         KC_F1,      KC_F2,      KC_F3,      KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_PSCR,          KC_MUTE,
+        KC_DEL,         KC_1,       KC_2,       KC_3,       KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC,          TD(lay1),
+        KC_TAB,         KC_Q,       KC_W,       KC_E,       KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS,          TD(lay2),
+        KC_CAPS,        KC_A,       KC_S,       KC_D,       KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,           TD(lay3),
+        KC_LSFT,                    KC_Z,       KC_X,       KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,          KC_RSFT, KC_UP,   KC_END,
+        CTL_T(KC_ENT),  KC_LGUI,    KC_LALT,                            KC_SPC,                                   KC_RALT, TO(0),   KC_RCTL, KC_LEFT, KC_DOWN, KC_RGHT
     ),
 
-
-
-/*
-    [5] = LAYOUT( DEFAULT TEMPLATE
-    QK_GESC,    KC_F1,      KC_F2,      KC_F3,      KC_F4,            KC_F5,    KC_F6,    KC_F7,    KC_F8,    KC_F9,       KC_F10,    KC_F11,     KC_F12,     KC_PSCR,              KC_DEL,    DT_PRNT,   DT_UP,    DT_DOWN,
-    KC_GRV,     KC_1,       KC_2,       KC_3,       KC_4,             KC_5,     KC_6,     KC_7,     KC_8,     KC_9,        KC_0,      RGB_VAD,    RGB_VAI,    KC_BSPC,              KC_HOME,   KC_PSLS,   KC_PAST,  KC_PMNS,
-    KC_TAB,     KC_Q,       KC_W,       KC_E,       KC_R,             KC_T,     KC_Y,     KC_U,     KC_I,     KC_O,        KC_P,      KC_LBRC,    KC_RBRC,    KC_BSLS,              KC_P7,     KC_P8,     KC_P9,    KC_PPLS,
-    KC_CAPS,    KC_A,       KC_S,       KC_D,       KC_F,             KC_G,     KC_H,     KC_J,     KC_K,     KC_L,        KC_SCLN,   KC_QUOT,    KC_ENT,                           KC_P4,     KC_P5,     KC_P6,
-    KC_LSFT,    KC_Z,       KC_X,       KC_C,       KC_V,             KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,      KC_SLSH,   KC_RSFT,                RGB_SPI,              KC_P1,     KC_P2,     KC_P3,    KC_PENT,
-    KC_LCTL,    KC_LGUI,    KC_LALT,                KC_SPC,                                                   KC_RALT,     MO(1),     KC_RCTL,    RGB_RMOD,   RGB_SPD,  RGB_MOD,    KC_P0,                KC_PDOT
-    )
-
-    [5] = LAYOUT( DEFAULT TEMPLATE
-    QK_GESC,    _______,      _______,      _______,      _______,             _______,     _______,     _______,     _______,    KC_F9,       KC_F10,    KC_F11,     KC_F12,     KC_PSCR,              KC_DEL,    DT_PRNT,   DT_UP,    DT_DOWN,
-    KC_GRV,     _______,      _______,      _______,      _______,             _______,     _______,     _______,     _______,     KC_9,        KC_0,      RGB_VAD,    RGB_VAI,    KC_BSPC,              KC_HOME,   KC_PSLS,   KC_PAST,  KC_PMNS,
-    KC_TAB,     _______,      _______,      _______,      _______,             _______,     _______,     _______,     _______,     KC_O,        KC_P,      KC_LBRC,    KC_RBRC,    KC_BSLS,              KC_P7,     KC_P8,     KC_P9,    KC_PPLS,
-    KC_CAPS,    _______,      _______,      _______,      _______,             _______,     _______,     _______,     _______,     KC_L,        KC_SCLN,   KC_QUOT,    KC_ENT,                           KC_P4,     KC_P5,     KC_P6,
-    KC_LSFT,    _______,      _______,      _______,      _______,             _______,     _______,     _______,     _______,   KC_DOT,      KC_SLSH,   KC_RSFT,                RGB_SPI,              KC_P1,     KC_P2,     KC_P3,    KC_PENT,
-    KC_LCTL,    KC_LGUI,    KC_LALT,                KC_SPC,                                                   KC_RALT,     MO(1),     KC_RCTL,    RGB_RMOD,   RGB_SPD,  RGB_MOD,    KC_P0,                KC_PDOT
-    )
-
-[_FL] = LAYOUT(
-    QK_BOOT,  KC_MYCM,  KC_WHOM,  KC_CALC,  KC_MSEL,  KC_MPRV,  KC_MRWD,  KC_MPLY,  KC_MSTP,  KC_MUTE,  KC_VOLD,  KC_VOLU,  _______,   _______,  _______,  _______,  _______,  _______,
-    _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,
-    _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,
-    _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,             _______,  _______,  _______,
-    _______,  RM_HUEU,  RM_HUED,  RM_SPDD,  RM_SPDU,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  RM_VALU,   _______,  _______,  _______,  _______,
-    _______,  UC_WIN,   _______,                      _______,                                _______,  _______,  _______,  RM_PREV,   RM_VALD,  RM_NEXT,  _______,  _______)
 };
-*/
+// clang-format on
 
-};
+//      #if defined(ENCODER_MAP_ENABLE)
+//      const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
+//          [0] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU) },
+//          [1] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU) },
+//          [2] = { ENCODER_CCW_CW(MS_WHLL, MS_WHLR) },
+//          [3] = { ENCODER_CCW_CW(UG_HUEU, UG_NEXT) },
+//          [4] = { ENCODER_CCW_CW(RM_VALD, RM_VALU) },
+//          [5] = { ENCODER_CCW_CW(MS_WHLD, MS_WHLU) },
+//      };
+//      #endif
 
-            // Tap Dance Codes
+// START ROTARY KNOB
+// ripped from: https://github.com/ForsakenRei/qmk-gmmk-pro/blob/main/gmmk/pro/rev1/ansi/keymaps/shigure/keymap.c
+    //  #ifdef ENCODER_ENABLE // Encoder Functionality
+    //  bool encoder_update_user(uint8_t index, bool clockwise)
+    //  {
+    //    if (clockwise)
+    //    {
+    //      if (keyboard_report->mods & MOD_BIT(KC_LCTL))
+    //      { // if holding Left Ctrl, scroll up and down
+    //        unregister_mods(MOD_BIT(KC_LCTL));
+    //        tap_code(KC_PGDN);
+    //        register_mods(MOD_BIT(KC_LCTL));
+    //      }
+    //      else if (keyboard_report->mods & MOD_BIT(KC_LSFT))
+    //      { // if you are holding L shift, scroll left and right
+    //        tap_code16(KC_WH_R);
+    //      }
+    //      else if (keyboard_report->mods & MOD_BIT(KC_LALT))
+    //      { // if holding Left Alt, change media next track
+    //        tap_code(KC_MEDIA_NEXT_TRACK);
+    //      }
+    //      else
+    //      {
+    //        tap_code(KC_VOLU); // Otherwise it just changes volume
+    //      }
+    //    }
+    //    else
+    //    {
+    //      if (keyboard_report->mods & MOD_BIT(KC_LCTL))
+    //      {
+    //        unregister_mods(MOD_BIT(KC_LCTL));
+    //        tap_code(KC_PGUP);
+    //        register_mods(MOD_BIT(KC_LCTL));
+    //      }
+    //      else if (keyboard_report->mods & MOD_BIT(KC_LSFT))
+    //      {
+    //        tap_code16(KC_WH_L);
+    //      }
+    //      else if (keyboard_report->mods & MOD_BIT(KC_LALT))
+    //      {
+    //        tap_code(KC_MEDIA_PREV_TRACK);
+    //      }
+    //      else
+    //      {
+    //        tap_code(KC_VOLD);
+    //      }
+    //    }
+    //    return false;
+    //  }
+    //  #endif
+    //  // END ROTARY KNOB
 
-typedef struct {
-    uint16_t tap;
-    uint16_t hold;
-    uint16_t held;
-} tap_dance_tap_hold_t;
+    #if defined(ENCODER_ENABLE) && !defined(ENCODER_DEFAULTACTIONS_ENABLE) // Encoder Functionality when not using userspace defaults
+    void encoder_action_rgbhue(bool clockwise) {
+        if (clockwise)
+            rgblight_increase_hue_noeeprom();
+        else
+            rgblight_decrease_hue_noeeprom();
+    }
+
+    bool encoder_update_user(uint8_t index, bool clockwise) {
+        uint8_t mods_state = get_mods();
+        if (mods_state & MOD_BIT(KC_LSFT)) { // If you are holding L shift, encoder changes layers
+            encoder_action_horizontalscroll(clockwise);
+        } else if (mods_state & MOD_BIT(KC_RSFT)) { // If you are holding R shift, Page up/dn
+            unregister_mods(MOD_BIT(KC_RSFT));
+            encoder_action_navpage(clockwise);
+            register_mods(MOD_BIT(KC_RSFT));
+        } else if (mods_state & MOD_BIT(KC_LCTL)) { // if holding Left Ctrl, navigate next/prev word
+            encoder_action_navword(clockwise);
+        } else if (mods_state & MOD_BIT(KC_RCTL)) { // if holding Right Ctrl, change rgb hue/colour
+            encoder_action_rgbhue(clockwise);
+        } else if (mods_state & MOD_BIT(KC_LALT)) { // if holding Left Alt, change media next/prev track
+            encoder_action_mediatrack(clockwise);
+        } else {
+ //           switch (get_highest_layer(layer_state)) {
+ //               #ifdef IDLE_TIMEOUT_ENABLE
+ //               timeout_update_threshold(clockwise);
+ //               #endif
+ //               break;
+ //           default:
+                encoder_action_volume(clockwise); // Otherwise it just changes volume
+ //              break;
+ //          }
+        }
+        //return true; //set to return false to counteract enabled encoder in pro.c
+        return false;
+    }
+    #endif // ENCODER_ENABLE && !ENCODER_DEFAULTACTIONS_ENABLE
+
 
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (record->event.pressed) {
-        switch(keycode) {
-            case M_1:
-                SEND_STRING("Archi13180\n");
-                return false;
-             case M_2:
-                SEND_STRING("trung@architecttura.com");
-                return false;
-             case M_3:
-                SEND_STRING("Unusualjade453");
-                return false;
-            case M_4:
-                SEND_STRING("trung_mai@outlook.com");
-                return false;
+
+//  Macros
+    switch (keycode) {
+    case M_1:
+        if (record->event.pressed) {
+            // when keycode QMKBEST is pressed
+            SEND_STRING("Archi13180\n");
+        } else {
+            // when keycode QMKBEST is released
         }
-    }
+        break;
 
+        case M_2:
+        if (record->event.pressed) {
+           SEND_STRING(SS_LCTL("ac")); // selects all and copies
+        }
+        break;
+        case M_3:
+        if (record->event.pressed) {
+           SEND_STRING(SS_LCTL("av")); // selects all and paste
+        }
+        break;
+        case M_4:
+        if (record->event.pressed) {
+           SEND_STRING("mm"); // selects all and copies
+        }
+        break;
 
-    tap_dance_action_t *action;
-
-    switch (keycode) {  // list all tap dance keycodes with tap-hold configurations
-        case TD(TD_DEL):
-        case TD(TD_Q):
-        case TD(TD_W):
-        case TD(TD_E):
-        //case TD(TD_CMD):
-        case TD(TD_2):
-        case TD(TD_3):
-        case TD(TD_4):
-        case TD(TD_8):
-            action = &tap_dance_actions[QK_TAP_DANCE_GET_INDEX(keycode)];
-            if (!record->event.pressed && action->state.count && !action->state.finished) {
-                tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)action->user_data;
-                tap_code16(tap_hold->tap);
-            }
+/*        case M_4:
+        if (record->event.pressed) {
+           SEND_STRING("gmmk\pro\rev2\ansi\keymaps\trung"); // selects all and copies
+        }
+        break;
+        */
     }
     return true;
-};
 
-
-void tap_dance_tap_hold_finished(tap_dance_state_t *state, void *user_data) {
-    tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)user_data;
-
-    if (state->pressed) {
-        if (state->count == 1
-#ifndef PERMISSIVE_HOLD
-            && !state->interrupted
-#endif
-        ) {
-            register_code16(tap_hold->hold);
-            tap_hold->held = tap_hold->hold;
-        } else {
-            register_code16(tap_hold->tap);
-            tap_hold->held = tap_hold->tap;
-        }
+    switch (keycode) {
+        case LT(2,KC_NO):
+            if (record->tap.count && record->event.pressed) {
+                tap_code16(C(KC_C)); // Intercept tap function to send Ctrl-C
+            } else if (record->event.pressed) {
+                tap_code16(C(KC_V)); // Intercept hold function to send Ctrl-V
+            }
+            return false;
     }
+    return true;
+
+
 }
 
-void tap_dance_tap_hold_reset(tap_dance_state_t *state, void *user_data) {
-    tap_dance_tap_hold_t *tap_hold = (tap_dance_tap_hold_t *)user_data;
 
-    if (tap_hold->held) {
-        unregister_code16(tap_hold->held);
-        tap_hold->held = 0;
-    }
-}
-
-#define ACTION_TAP_DANCE_TAP_HOLD(tap, hold) \
-    { .fn = {NULL, tap_dance_tap_hold_finished, tap_dance_tap_hold_reset}, .user_data = (void *)&((tap_dance_tap_hold_t){tap, hold, 0}), }
-
+// Tap Dance definitions
 tap_dance_action_t tap_dance_actions[] = {
-  [TD_DEL] = ACTION_TAP_DANCE_TAP_HOLD(KC_DEL, KC_BSPC),
-  [TD_Q] = ACTION_TAP_DANCE_TAP_HOLD(KC_Q, KC_QUOT),
-  [TD_W] = ACTION_TAP_DANCE_TAP_HOLD(KC_W, KC_DQT),
-  [TD_E] = ACTION_TAP_DANCE_TAP_HOLD(KC_E, KC_ENT),
-  [TD_2] = ACTION_TAP_DANCE_TAP_HOLD(KC_SLSH, KC_ASTR), // slash,space
-  [TD_3] = ACTION_TAP_DANCE_TAP_HOLD(KC_EQL, KC_UNDS), // astrarisk, underscore
-  [TD_4] = ACTION_TAP_DANCE_TAP_HOLD(KC_MINS, KC_PLUS), // plus,minus
-  [TD_8] = ACTION_TAP_DANCE_TAP_HOLD(KC_PMNS, KC_UNDS), // dash,underscore
-  //[TD_CMD] = ACTION_TAP_DANCE_TAP_HOLD(KC_DQT, KC_QUOT),
-  /*[TD_#] = ACTION_TAP_DANCE_DOUBLE(KC_DQT,KC_QUOT),*/
-
+    // Tap once for Escape, twice for Caps Lock
+    [lay1] = ACTION_TAP_DANCE_DOUBLE(KC_PGUP, TG(1)),
+    [lay2] = ACTION_TAP_DANCE_DOUBLE(KC_PGDN, TG(2)),
+    [lay3] = ACTION_TAP_DANCE_DOUBLE(KC_HOME, TG(3)),
+    [wqte] = ACTION_TAP_DANCE_DOUBLE(KC_W, Qte),
+    [qqte] = ACTION_TAP_DANCE_DOUBLE(KC_Q, KC_QUOT),
+    [lead] = ACTION_TAP_DANCE_DOUBLE(QK_LEAD,caps),
+    [esc] = ACTION_TAP_DANCE_DOUBLE(KC_ESC,KC_ENT),
 };
 
-// Combo Codes
-    const uint16_t PROGMEM combo1[] = {KC_CAPS, KC_1, COMBO_END};
 
-    enum combo_events {
-    CMBE1,
-    CMBE2,
-    };
 
-    const uint16_t PROGMEM CMB1[] = {KC_CAPS, KC_1, COMBO_END};
-    const uint16_t PROGMEM CMB2[] = {KC_CAPS, KC_2, COMBO_END};
+void leader_start_user(void) {
+    // Do something when the leader key is pressed
+}
 
-    combo_t key_combos[] = {
-    [CMBE1] = COMBO_ACTION(CMB1),
-    [CMBE2] = COMBO_ACTION(CMB2),
-    };
-    /* COMBO_ACTION(x) is same as COMBO(x, KC_NO) */
-
-    void process_combo_event(uint16_t combo_index, bool pressed) {
-    switch(combo_index) {
-        case CMBE1:
-        if (pressed) {
-            SEND_STRING("1/4");
-        }
-        break;
-        case CMBE2:
-        if (pressed) {
-            SEND_STRING("½");
-        }
-        break;
+void leader_end_user(void) {
+    if (leader_sequence_one_key(KC_1)) {
+        SEND_STRING("1/8\"");
+    } else if (leader_sequence_one_key(KC_2)) {
+        SEND_STRING("1/2\"");
+    } else if (leader_sequence_one_key(KC_3)) {
+        SEND_STRING("3/8\"");
+    } else if (leader_sequence_one_key(KC_4)) {
+        SEND_STRING("3/4\"");
+    } else if (leader_sequence_one_key(KC_M)) {
+        tap_code16(KC_APP);
+//    } else if (leader_sequence_three_keys(KC_D, KC_D, KC_S)) {
+//        // Leader, d, d, s => Types the below string
+//        SEND_STRING("https://start.duckduckgo.com\n");
+//    } else if (leader_sequence_two_keys(KC_A, KC_S)) {
+//        // Leader, a, s => GUI+S
+//        tap_code16(LGUI(KC_S));
     }
-    }
+}
 
-
-// Lighting Layers
-
-
-
-//  bool rgb_matrix_indicaTGrs_kb(void) {
-//      if (!rgb_matrix_indicaTGrs_user()) {
-//          return false;
-//      }
-//      rgb_matrix_set_color(0, 255, 255, 255);
-//      return true;
-//  }
-//
-//  bool rgb_matrix_indicaTGrs_advanced_user(uint8_t led_min, uint8_t led_max) {
-//      if (get_highest_layer(layer_state) > 0) {
-//          uint8_t layer = get_highest_layer(layer_state);
-//
-//          for (uint8_t row = 0; row < MATRIX_ROWS; ++row) {
-//              for (uint8_t col = 0; col < MATRIX_COLS; ++col) {
-//                  uint8_t index = g_led_config.matrix_co[row][col];
-//
-//                  if (index >= led_min && index < led_max && index != NO_LED &&
-//                  keymap_key_TG_keycode(layer, (keypos_t){col,row}) > KC_TRNS) {
-//                      rgb_matrix_set_color(28, RGB_GREEN);
-//                  }
-//              }
-//          }
-//          if (host_keyboard_led_state().caps_lock) {
-//          for (uint8_t i = led_min; i < led_max; i++) {
-//              if (g_led_config.flags[i] & LED_FLAG_KEYLIGHT) {
-//                  rgb_matrix_set_color(54, RGB_RED);
-//              }
-//          }
-//      }
-//      }
-//      return false;
-//  }
-//
