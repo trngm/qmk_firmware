@@ -45,13 +45,8 @@ enum custom_keycodes {
 
 // Tap Dance declarations
 enum {
-    lay1,
-    lay2,
-    lay3,
-    wqte,
-    qqte,
     lead,
-    esc
+    esc,
 };
 
 
@@ -83,7 +78,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         TD(esc),  KC_F1,    KC_F2,    KC_F3,  KC_F4,   DM_PLY1, DM_PLY2, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_PSCR,          KC_MUTE,
         KC_DEL,   KC_1,     KC_2,     KC_3,   KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC,          KC_PGUP,
         FN_LT2,   KC_Q,     KC_W,     KC_E,   KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS,          KC_PGDN,
-        caps,     KC_A,     KC_S,     KC_D,   KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,           KC_HOME,
+        QK_LEAD,  KC_A,     KC_S,     KC_D,   KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,           KC_HOME,
         KC_LSFT,            KC_Z,     KC_X,   KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,          KC_RSFT, KC_UP,   KC_END,
         KC_LCTL,  KC_LGUI,  LALT_T(KC_ENT),                            FN_LT1,                      QK_LEAD, MO(3),     KC_RCTL, KC_LEFT, KC_DOWN, KC_RGHT
     ),
@@ -92,7 +87,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         QK_GESC, KC_F11, KC_F12,   KC_F13,  KC_F14,  KC_F15,  KC_F16,  KC_F17,  KC_F18,  KC_F19, KC_F20, KC_F21, KC_F22, KC_F23,               _______,
         KC_0,    KC_1,    KC_2,    KC_3,    _______, _______, _______,    _______, _______, _______, _______, _______, _______, _______,          KC_PGUP,
         KC_TAB,  KC_4,    KC_5,    KC_6,    KC_BSPC, KC_DQT,  M_4, MS_UP, _______, _______, _______, _______, _______, QK_BOOT,              KC_PGDN,
-        _______, KC_7,    KC_8,    KC_9,    KC_SPC,  KC_QUOT, MS_LEFT, MS_DOWN, MS_RGHT,    _______, _______, _______,          _______,          _______,
+        QK_LEAD, KC_7,    KC_8,    KC_9,    KC_SPC,  KC_QUOT, MS_LEFT, MS_DOWN, MS_RGHT,    _______, _______, _______,          _______,          _______,
         _______, KC_MINS, KC_SLSH, KC_EQL,  KC_DOT,  _______, _______, _______, _______,    _______, _______,          _______, RM_NEXT, _______,
         CTL_T(KC_ENT), _______, KC_LALT,                            _______,                         _______, TO(0), _______, RM_SPDD, RM_PREV, RM_SPDU
     ),
@@ -128,21 +123,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
         [_DEFAULT] = LAYOUT(
         KC_ESC,         KC_F1,      KC_F2,      KC_F3,      KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_PSCR,          KC_MUTE,
-        KC_DEL,         KC_1,       KC_2,       KC_3,       KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC,          TD(lay1),
-        KC_TAB,         KC_U,       KC_I,       KC_O,       KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS,          TD(lay2),
-        KC_CAPS,        KC_J,       KC_K,       KC_L,       KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,           TD(lay3),
+        KC_DEL,         KC_1,       KC_2,       KC_3,       KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC,          _______,
+        KC_TAB,         KC_U,       KC_I,       KC_O,       KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS,          _______,
+        KC_CAPS,        KC_J,       KC_K,       KC_L,       KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,           _______,
         KC_LSFT,                    KC_Z,       KC_X,       KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,          KC_RSFT, KC_UP,   KC_END,
         CTL_T(KC_ENT),  KC_LGUI,    KC_LALT,                            KC_SPC,                                   KC_RALT, TO(0),   KC_RCTL, KC_LEFT, KC_DOWN, KC_RGHT
     ),
 
     [_DEFAULT] = LAYOUT(
         KC_ESC,         KC_F1,      KC_F2,      KC_F3,      KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_PSCR,          KC_MUTE,
-        KC_DEL,         KC_1,       KC_2,       KC_3,       KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC,          TD(lay1),
-        KC_TAB,         KC_Q,       KC_W,       KC_E,       KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS,          TD(lay2),
-        KC_CAPS,        KC_A,       KC_S,       KC_D,       KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,           TD(lay3),
+        KC_DEL,         KC_1,       KC_2,       KC_3,       KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC,          _______,
+        KC_TAB,         KC_Q,       KC_W,       KC_E,       KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS,          _______,
+        KC_CAPS,        KC_A,       KC_S,       KC_D,       KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,           _______,
         KC_LSFT,                    KC_Z,       KC_X,       KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH,          KC_RSFT, KC_UP,   KC_END,
         CTL_T(KC_ENT),  KC_LGUI,    KC_LALT,                            KC_SPC,                                   KC_RALT, TO(0),   KC_RCTL, KC_LEFT, KC_DOWN, KC_RGHT
     ),
+
+
+
 
 };
 
@@ -315,18 +313,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     }
     return true;
 
-
 }
+
 
 
 // Tap Dance definitions
 tap_dance_action_t tap_dance_actions[] = {
-    // Tap once for Escape, twice for Caps Lock
-    [lay1] = ACTION_TAP_DANCE_DOUBLE(KC_PGUP, TG(1)),
-    [lay2] = ACTION_TAP_DANCE_DOUBLE(KC_PGDN, TG(2)),
-    [lay3] = ACTION_TAP_DANCE_DOUBLE(KC_HOME, TG(3)),
-    [wqte] = ACTION_TAP_DANCE_DOUBLE(KC_W, Qte),
-    [qqte] = ACTION_TAP_DANCE_DOUBLE(KC_Q, KC_QUOT),
     [lead] = ACTION_TAP_DANCE_DOUBLE(QK_LEAD,caps),
     [esc] = ACTION_TAP_DANCE_DOUBLE(KC_ESC,KC_ENT),
 };
@@ -339,13 +331,35 @@ void leader_start_user(void) {
 
 void leader_end_user(void) {
     if (leader_sequence_one_key(KC_1)) {
-        SEND_STRING("1/8\"");
+        SEND_STRING("1/4\"");
     } else if (leader_sequence_one_key(KC_2)) {
         SEND_STRING("1/2\"");
     } else if (leader_sequence_one_key(KC_3)) {
-        SEND_STRING("3/8\"");
-    } else if (leader_sequence_one_key(KC_4)) {
         SEND_STRING("3/4\"");
+    } else if (leader_sequence_one_key(KC_4)) {
+        SEND_STRING("1/8\"");
+    } else if (leader_sequence_one_key(KC_5)) {
+        SEND_STRING("5/8\"");
+    } else if (leader_sequence_one_key(KC_6)) {
+        SEND_STRING("3/8\"");
+    } else if (leader_sequence_one_key(KC_7)) {
+        SEND_STRING("7/8\"");
+    } else if (leader_sequence_one_key(QK_LEAD)) {
+        tap_code16(caps);
+    } else if (leader_sequence_one_key(KC_Q)) {
+        SEND_STRING("1/16\"");
+    } else if (leader_sequence_one_key(KC_W)) {
+        SEND_STRING("3/32\"");
+    } else if (leader_sequence_one_key(KC_A)) {
+        SEND_STRING("\"");
+    } else if (leader_sequence_one_key(KC_S)) {
+        SEND_STRING("\'");
+    } else if (leader_sequence_one_key(KC_D)) {
+        SEND_STRING("mm");
+    } else if (leader_sequence_one_key(KC_8)) {
+        SEND_STRING("\"");
+    } else if (leader_sequence_one_key(KC_9)) {
+        SEND_STRING("mm");
     } else if (leader_sequence_one_key(KC_M)) {
         tap_code16(KC_APP);
 //    } else if (leader_sequence_three_keys(KC_D, KC_D, KC_S)) {
@@ -356,4 +370,3 @@ void leader_end_user(void) {
 //        tap_code16(LGUI(KC_S));
     }
 }
-
