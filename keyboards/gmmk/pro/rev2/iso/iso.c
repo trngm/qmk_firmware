@@ -1,4 +1,4 @@
-/* Copyright 2021 Gigahawk
+/* Copyright 2021 Glorious, LLC <salman@pcgamingrace.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -87,37 +87,38 @@ const aw20216s_led_t PROGMEM g_aw20216s_leds[AW20216S_LED_COUNT] = {
     {0, SW12_CS16, SW12_CS17, SW12_CS18},  //  65, Ct_R, k04
 
     {1, SW1_CS1, SW1_CS2, SW1_CS3},     //  66, F12, ka5
-    {1, SW1_CS13, SW1_CS14, SW1_CS15},  //  67, LED, l01
-    {1, SW1_CS16, SW1_CS17, SW1_CS18},  //  68, LED, l11
-    {1, SW2_CS4, SW2_CS5, SW2_CS6},     //  69, Prt, k97
-    {1, SW2_CS13, SW2_CS14, SW2_CS15},  //  70, LED, l02
-    {1, SW2_CS16, SW2_CS17, SW2_CS18},  //  71, LED, l12
-    {1, SW3_CS4, SW3_CS5, SW3_CS6},     //  72, Del, k65
-    {1, SW3_CS13, SW3_CS14, SW3_CS15},  //  73, LED, l03
-    {1, SW3_CS16, SW3_CS17, SW3_CS18},  //  74, LED, l13
-    {1, SW4_CS4, SW4_CS5, SW4_CS6},     //  75, PgUp, k15
-    {1, SW4_CS13, SW4_CS14, SW4_CS15},  //  76, LED, l04
-    {1, SW4_CS16, SW4_CS17, SW4_CS18},  //  77, LED, l14
-    {1, SW5_CS1, SW5_CS2, SW5_CS3},     //  78, =, k66
-    {1, SW5_CS10, SW5_CS11, SW5_CS12},  //  79, Right, k05
-    {1, SW5_CS13, SW5_CS14, SW5_CS15},  //  80, LED, l05
-    {1, SW5_CS16, SW5_CS17, SW5_CS18},  //  81, LED, l15
-    {1, SW6_CS4, SW6_CS5, SW6_CS6},     //  82, End, k75
-    {1, SW6_CS13, SW6_CS14, SW6_CS15},  //  83, LED, l06
-    {1, SW6_CS16, SW6_CS17, SW6_CS18},  //  84, LED, l16
-    {1, SW7_CS1, SW7_CS2, SW7_CS3},     //  85, BSpc, ka1
-    {1, SW7_CS4, SW7_CS5, SW7_CS6},     //  86, PgDn, k25
-    {1, SW7_CS13, SW7_CS14, SW7_CS15},  //  87, LED, l07
-    {1, SW7_CS16, SW7_CS17, SW7_CS18},  //  88, LED, l17
-    {1, SW8_CS1, SW8_CS2, SW8_CS3},     //  89, ], k61
-    {1, SW8_CS4, SW8_CS5, SW8_CS6},     //  90, Sh_R, k91
-    {1, SW8_CS13, SW8_CS14, SW8_CS15},  //  91, LED, l08
-    {1, SW8_CS16, SW8_CS17, SW8_CS18},  //  92, LED, l18
-    {1, SW9_CS1, SW9_CS2, SW9_CS3},     //  93, \, ka2
+    {1, SW1_CS4, SW1_CS5, SW1_CS6},     //  67, \, k23
+    {1, SW1_CS13, SW1_CS14, SW1_CS15},  //  68, LED, l01
+    {1, SW1_CS16, SW1_CS17, SW1_CS18},  //  69, LED, l11
+    {1, SW2_CS4, SW2_CS5, SW2_CS6},     //  70, Prt, k97
+    {1, SW2_CS13, SW2_CS14, SW2_CS15},  //  71, LED, l02
+    {1, SW2_CS16, SW2_CS17, SW2_CS18},  //  72, LED, l12
+    {1, SW3_CS4, SW3_CS5, SW3_CS6},     //  73, Del, k65
+    {1, SW3_CS13, SW3_CS14, SW3_CS15},  //  74, LED, l03
+    {1, SW3_CS16, SW3_CS17, SW3_CS18},  //  75, LED, l13
+    {1, SW4_CS4, SW4_CS5, SW4_CS6},     //  76, PgUp, k15
+    {1, SW4_CS13, SW4_CS14, SW4_CS15},  //  77, LED, l04
+    {1, SW4_CS16, SW4_CS17, SW4_CS18},  //  78, LED, l14
+    {1, SW5_CS1, SW5_CS2, SW5_CS3},     //  79, =, k66
+    {1, SW5_CS10, SW5_CS11, SW5_CS12},  //  80, Right, k05
+    {1, SW5_CS13, SW5_CS14, SW5_CS15},  //  81, LED, l05
+    {1, SW5_CS16, SW5_CS17, SW5_CS18},  //  82, LED, l15
+    {1, SW6_CS4, SW6_CS5, SW6_CS6},     //  83, End, k75
+    {1, SW6_CS13, SW6_CS14, SW6_CS15},  //  84, LED, l06
+    {1, SW6_CS16, SW6_CS17, SW6_CS18},  //  85, LED, l16
+    {1, SW7_CS1, SW7_CS2, SW7_CS3},     //  86, BSpc, ka1
+    {1, SW7_CS4, SW7_CS5, SW7_CS6},     //  87, PgDn, k25
+    {1, SW7_CS13, SW7_CS14, SW7_CS15},  //  88, LED, l07
+    {1, SW7_CS16, SW7_CS17, SW7_CS18},  //  89, LED, l17
+    {1, SW8_CS1, SW8_CS2, SW8_CS3},     //  90, ], k61
+    {1, SW8_CS4, SW8_CS5, SW8_CS6},     //  91, Sh_R, k91
+    {1, SW8_CS13, SW8_CS14, SW8_CS15},  //  92, LED, l08
+    {1, SW8_CS16, SW8_CS17, SW8_CS18},  //  93, LED, l18
     {1, SW9_CS4, SW9_CS5, SW9_CS6},     //  94, Up, k35
-    {1, SW10_CS4, SW10_CS5, SW10_CS6},  //  95, Left, k03
-    {1, SW11_CS1, SW11_CS2, SW11_CS3},  //  96, Enter, ka4
-    {1, SW11_CS4, SW11_CS5, SW11_CS6},  //  97, Down, k73
+    {1, SW10_CS1, SW10_CS2, SW10_CS3},  //  95, #, k84
+    {1, SW10_CS4, SW10_CS5, SW10_CS6},  //  96, Left, k03
+    {1, SW11_CS1, SW11_CS2, SW11_CS3},  //  97, Enter, ka4
+    {1, SW11_CS4, SW11_CS5, SW11_CS6},  //  98, Down, k73
 };
 // clang-format on
 #endif
