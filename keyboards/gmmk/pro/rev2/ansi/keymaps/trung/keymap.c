@@ -53,6 +53,36 @@ enum {
 };
 
 
+/* 
+enum unicode_names {
+    DIAMETER,
+    SUPER2,
+    MORELESS,
+    U14,
+    U12,
+    U34,
+    U18,
+    U38,
+    U58,
+    U78,
+};
+
+// Unicode
+const uint32_t PROGMEM unicode_map[] = {
+    [DIAMETER]  = 0x2300,  // ⌀
+    [MORELESS] = 0x00B1,  // ±
+    [SUPER2] = 0x00B2,  // ²
+    [U14]  = 0x00BC,  // ¼
+    [U12]  = 0x00BD,  // ½
+    [U34]  = 0x00BE,  // ¾
+    [U18]  = 0x215B,  // ⅛
+    [U38]  = 0x215C,  // ⅜
+    [U58]  = 0x215D,  // ⅝
+    [U78]  = 0x215E,  // ⅞
+};
+ */
+
+
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -107,12 +137,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     
     [_FN] = LAYOUT(
         TG(0),   TG(1),   TG(2),   TG(3),   TG(4),   TG(5), _______, _______, _______, _______, _______, _______, _______, _______,            QK_RBT,
-        _______, M_1,     M_4,     _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          DM_PLY1,
+        _______, UC(0x40B), UC(0x00BD), UC(0x00BE), UC(0x215B), UC(0x215D), UC(0x215C), UC(0x215E), _______, _______, _______, _______, _______, M_1,              DM_PLY1,
         _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, QK_BOOT,          DM_PLY2,
         _______, AS_ON,   AS_OFF,  _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______,          DM_REC1,
         _______,          _______, _______, RM_ON, RM_TOGG, _______, _______, M_5, _______, _______, _______,          _______, RM_VALD, DM_REC2,
         _______, _______, _______,                            _______,                            _______, TO(0), _______, RM_SATD, RM_PREV, RM_SPDU
     ),
+
+
+    /* 
+        [MORELESS] = 0x00B1,  // ±
+    [SUPER2] = 0x00B2,  // ²
+    [U14]  = 0x00BC,  // ¼
+    [U12]  = 0x00BD,  // ½
+    [U34]  = 0x00BE,  // ¾
+    [U18]  = 0x215B,  // ⅛
+    [U38]  = 0x215C,  // ⅜
+    [U58]  = 0x215D,  // ⅝
+    [U78]  = 0x215E,  // ⅞
+    */
 
 
     [4] = LAYOUT(
@@ -151,7 +194,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
         RGB_MATRIX_INDICATOR_SET_COLOR(82, rgb(255, 255, 255));
         RGB_MATRIX_INDICATOR_SET_COLOR(72, rgb(255, 255, 255)); */
     } else {
-        RGB_MATRIX_INDICATOR_SET_COLOR(3, 0, 0, 0);
+        RGB_MATRIX_INDICATOR_SET_COLOR(3, 0, 0, 0); 
     }
     return false;
 }
@@ -366,9 +409,12 @@ void leader_start_user(void) {
             SEND_STRING(SS_LCTL("x") "[" SS_LCTL("v") "]"); 
         } else if (leader_sequence_two_keys(KC_0,KC_1)) {
             SEND_STRING("()" SS_TAP(X_LEFT)); 
+            
         } else if (leader_sequence_one_key(KC_M)) {
                 tap_code16(KC_APP);
-            
+        } else if (leader_sequence_one_key(KC_F1)) {
+            send_unicode_string("00BC"); 
+
         // Leader, d, d => Ctrl+A, Ctrl+C
     //    } else if (leader_sequence_three_keys(KC_D, KC_D, KC_S)) {
     //        // Leader, d, d, s => Types the below string
@@ -378,3 +424,5 @@ void leader_start_user(void) {
     //        tap_code16(LGUI(KC_S));
         }
     }
+
+
